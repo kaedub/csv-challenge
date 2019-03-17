@@ -1,46 +1,44 @@
-from csv import DictReader, DictWriter
 import sys
+from config import DATA_FILENAME, FORMATS_FILENAME
+from validation import validation
 
 # formats:
 # A - lastname, firstname, phone-closed, color, zip
 # B - fullname, color, zip, phone-open
 # C - firstname, lastname, zip, phone-open, color
 
-class LineValidator():
-    def __init__(self, formats=""):
-        self.formats = formats
-
-    def is_color(self, s):
-        """Returns true if 's' is a valid color"""
+def parse_formats(filename):
+    formats = []
+    with open(filename) as f:
         pass
-
-    def _is_closed_phone_number(self, phone):
-        """Returns true if 'phone' is a valid phone number with parentheses and dashes"""
-        pass
-
-    def _is_open_phone_number(self, phone):
-        """Returns true if 'phone' is a valid phone number without parenthesis or dashes"""
-        pass
-
-    def is_phone_number(self, phone):
-        """Returns true if 'phone' is a valid phone number"""
-        return self._is_closed_phone_number or self._is_open_phone_number
-    
-    def is_zip(self, zip):
-        """Returns true if 'zip' is a valid zip code"""
-        return zip.isdigit() and len(zip) == 5
 
 class FileReader():
     def __init__(self, filename):
         self.filename = filename
+        self.lines = []
+        self.errors = []
 
-    def read_file(filename):
+    def read(self):
         """Returns the master inventory as a dictionary."""
-        cache = {}
-        validator = LineValidator()
-        with open(filename, encoding="utf8") as f:
+
+        with open(self.filename, encoding="utf8") as f:
+            
             line = f.readline()
+
             while line != '':
-                print(line)
+                # read each line
+                self.lines.append(line)
+
+                # remove invalid lines
+
                 line = f.readline()
-        return cache
+        return self.lines
+    
+    def __repr__(self):
+        return f'<FileReader filename: {self.filename} lines: {len(self.lines)}>'
+
+if __name__ == "__main__":
+    reader = FileReader(DATA_FILENAME)
+    reader.read()
+    print(reader)
+    [print(line) for line in reader.lines]

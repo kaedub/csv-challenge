@@ -1,13 +1,13 @@
 from config import ZIP_LENGTH, PHONE_LENGTH
 
-def _is_name(name):
-    return name.isalpha()
+def is_name(name):
+    return ''.join(name.split(' ')).isalpha()
 
-def _is_phone(phone):
+def is_phone(phone):
     """Returns true if 'phone' is a valid phone number"""
     return _is_phone_spaced(phone) or _is_phone_hyphenated(phone)
 
-def _is_zip(zip):
+def is_zip(zip):
     """Returns true if 'zip' is a valid zip code"""
     return zip.isdigit() and len(zip) == 5
 
@@ -25,9 +25,3 @@ def _is_phone_spaced(phone):
     """Returns true if 'phone' is a valid phone number with spaces instead of dashes and parentheses"""
     raw_phone = ''.join(phone.split(' '))
     return len(raw_phone) == 10 and raw_phone.isdigit()
-
-validation = {
-    "phone": _is_phone,
-    "zip": _is_zip,
-    "name": _is_name,
-}

@@ -1,6 +1,5 @@
 import sys
 from config import DATA_FILENAME, FORMATS_FILENAME
-from validation import validation
 
 # formats:
 # A - lastname, firstname, phone-closed, color, zip
@@ -11,6 +10,12 @@ def parse_formats(filename):
     formats = []
     with open(filename) as f:
         pass
+
+# Normalize
+#   FileReader
+#   LineParser and Validation
+#   Sorter
+#   JSONWriter
 
 class FileReader():
     def __init__(self, filename):

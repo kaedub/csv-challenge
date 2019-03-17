@@ -21,25 +21,25 @@ class ValidationTestCase(TestCase):
         for phone in test_case_data.get('valid_phones'):
             self.assertTrue(
                 is_phone(phone),
-                f'{phone} is not a valid phone number')
+                f'"{phone}" is not a valid phone number')
         
-        for invalid_phone in test_case_data.get('invalid_phones'):
+        for phone in test_case_data.get('invalid_phones'):
             self.assertFalse(
-                is_phone(invalid_phone), 
-                f'{invalid_phone} is not a valid phone number')
+                is_phone(phone), 
+                f'"{phone}" is not a valid phone number')
 
-    # def test_validate_zip(self):
-    #     """Can validate a zip code?"""
+    def test_validate_zip(self):
+        """Can validate a zip code?"""
         
-    #     for zip in test_case_data.get('valid_zips'):
-    #         self.assertTrue(is_zip(zip))
-    #     for zip in test_case_data.get('invalid_zips'):
-    #         self.assertFalse(is_zip(zip))
+        for zip in test_case_data.get('valid_zips'):
+            self.assertTrue(is_zip(zip), f'"{zip}" is not a valid zip code')
+        for zip in test_case_data.get('invalid_zips'):
+            self.assertFalse(is_zip(zip), f'"{zip}" is not a valid zip code')
 
-    # def test_validate_name(self):
-    #     """Can validate a name?"""
+    def test_validate_name(self):
+        """Can validate a name?"""
         
-    #     for name in test_case_data.get('valid_names'):
-    #         self.assertTrue(is_name(name))
-    #     for name in test_case_data.get('invalid_names'):
-    #         self.assertFalse(is_name(name))
+        for name in test_case_data.get('valid_names'):
+            self.assertTrue(is_name(name), f'"{name}" is not a valid name')
+        for name in test_case_data.get('invalid_names'):
+            self.assertFalse(is_name(name), f'"{name}" is not a valid name')

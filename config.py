@@ -1,0 +1,5 @@
+DATA_FILENAME = 'data.csv'
+FORMATS_FILENAME = 'formats.csv'
+ZIP_LENGTH = 5
+PHONE_LENGTH = 10
+

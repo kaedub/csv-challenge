@@ -1,5 +1,5 @@
 test_case_data = {
-    "valid_lines": [
+    "valid_entries": [
         "Smith, John, (623)-668-9293, yellow, 87360",
         "James Murphy, yellow, 83880, 018 154 6474"
         "Booker T., Washington, 87360, 373 781 7380, yellow",

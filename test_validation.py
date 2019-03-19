@@ -3,12 +3,8 @@
 import os
 from unittest import TestCase
 
-from validation import is_phone_spaced, is_phone_hyphenated, is_name, is_zip, is_line_formatted, validate_line
+from validation import is_phone_spaced, is_phone_hyphenated, is_name, is_zip
 from sample_data import test_case_data
-
-
-# NOTES:
-# Is '7037420996' to be considerd an invalid phone number?
 
 class ValidationTestCase(TestCase):
     """Test read file function"""
@@ -18,40 +14,44 @@ class ValidationTestCase(TestCase):
     def test_is_phone_spaced(self):
         """Can validate a phone number with spaced format?"""
         
+        # do valid spaced format phone numbers work?
         for phone in test_case_data.get('valid_phones_spaced'):
             self.assertTrue(
                 is_phone_spaced(phone),
                 f'"{phone}" is not a valid phone number')
         
-        # test that invalid phone numbers fail
+        # do invalid phone numbers fail?
         for phone in test_case_data.get('invalid_phones'):
             self.assertFalse(
                 is_phone_spaced(phone), 
-                f'"{phone}" is not a valid phone number')
+                f'"{phone}" is not a invalid phone number')
         
-        # test that hyphenated phone numbers fail
+        # do phone numbers for other valid formats fail?
         for phone in test_case_data.get('valid_phones_hyphenated'):
             self.assertFalse(
                 is_phone_spaced(phone), 
-                f'"{phone}" is not a valid phone number')
+                f'"{phone}" is not a invalid phone number')
     
     def test_is_phone_hyphenated(self):
         """Can validate a phone number with hyphenated format?"""
         
+        # do valid hyphenated format phone numbers work?
         for phone in test_case_data.get('valid_phones_hyphenated'):
             self.assertTrue(
                 is_phone_hyphenated(phone),
                 f'"{phone}" is not a valid phone number')
         
+        # do invalid phone numbers fail?
         for phone in test_case_data.get('invalid_phones'):
             self.assertFalse(
                 is_phone_hyphenated(phone), 
-                f'"{phone}" is not a valid phone number')
+                f'"{phone}" is not an invalid phone number')
         
+        # do phone numbers for other valid formats fail?
         for phone in test_case_data.get('valid_phones_spaced'):
             self.assertFalse(
                 is_phone_hyphenated(phone), 
-                f'"{phone}" is not a valid phone number')
+                f'"{phone}" is not an invalid phone number')
 
     def test_is_zip(self):
         """Can validate a zip code?"""
@@ -69,19 +69,18 @@ class ValidationTestCase(TestCase):
         for name in test_case_data.get('invalid_names'):
             self.assertFalse(is_name(name), f'"{name}" is not a valid name')
     
-    # def test_is_line_formatted(self):
-    #     """Can validate a line with a format?"""
+    # def test_is_row_formatted(self):
+    #     """Can validate a entry with a format?"""
 
-    #     line = test_case_data.get('valid_lines')[0].split(',')
+    #     entry = [field.strip() for field in test_case_data.get('valid_entries')[0].split(',')]
     #     _format = test_case_data.get('valid_formats')[0].split(',')
-    #     print("Test input", line, _format)
-    #     valid = is_line_formatted(line, _format)
-    #     self.assertTrue(valid, f'{line} is not a valid format')
+    #     valid = is_row_formatted(entry, _format)
+    #     self.assertTrue(valid, f'{entry} is not of a valid format')
 
-    # def test_validate_line(self):
-    #     """Can validate a line with a list of formats?"""
+    # def test_validate_row(self):
+    #     """Can validate a entry with a list of formats?"""
 
-    #     line = test_case_data.get('valid_lines')[0].split(',')
-    #     formats = test_case_data.get('valid_formats')
-    #     valid = validate_line(line, formats)
-    #     self.assertTrue(valid, f'{line} is not a valid format')
+    #     entry = test_case_data.get('valid_entries')[0].split(',')
+    #     formats = [_format.split(',') for _format in test_case_data.get('valid_formats')]
+    #     valid = validate_row(entry, formats)
+    #     self.assertTrue(valid, f'{entry} is not of a valid format')

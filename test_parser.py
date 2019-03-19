@@ -1,22 +1,39 @@
-"""Reader tests."""
+"""Tests for PersonalInfoParser"""
 
 import os
 from unittest import TestCase
-
-from app import read_file
+from parser import PersonalInfoParser
 
 FILENAME = 'data.csv'
 
-class ReadFileTestCase(TestCase):
+class PersonalInfoParserTestCase(TestCase):
     """Test read file function"""
 
     def setUp(self):
+        self.parser = PersonalInfoParser()
+
+    def test_is_line_formatted(self):
+        """Can check if a line is of a valid format?"""
+
         pass
 
+    def test_parse_field(self):
+        """Can parse a single field into a dictionary?"""
+        pass
 
-    def test_add_message(self):
-        """Can read a csv file?"""
+    def test_map_line_to_format(self):
+        """
+        pass
 
-        out = read_file(FILENAME)
+    def test_load_formats(self):
+        pass
 
-        self.assertEqual(out, {})
+    def test_parse(self):
+        pass
+
+    def test_to_json(self):
+        pass
+
+    def test_json_to_file(self):
+        pass
+

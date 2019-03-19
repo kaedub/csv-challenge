@@ -1,11 +1,4 @@
-import sys
-from config import DATA_FILENAME, FORMATS_FILENAME
 from validation import validate_line
-
-# formats:
-# A - lastname, firstname, phone-closed, color, zip
-# B - fullname, color, zip, phone-open
-# C - firstname, lastname, zip, phone-open, color
 
 class PersonalInfoParser():
     def __init__(self, filename):
@@ -38,16 +31,3 @@ class PersonalInfoParser():
     
     def __repr__(self):
         return f'<FileReader filename: {self.filename} lines: {len(self.lines)}>'
-
-def create_parser():
-    """Factory function that builds and returns a PersonalInfoParser instance"""
-    parser = PersonalInfoParser(DATA_FILENAME)
-    parser.load_formats(FORMATS_FILENAME)
-
-    return parser
-
-if __name__ == "__main__":
-    parser = create_parser()
-    pi_data = parser.read()
-    print(pi_data)
-    # [print(line) for line in reader.lines]

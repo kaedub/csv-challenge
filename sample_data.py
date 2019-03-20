@@ -1,13 +1,26 @@
 test_case_data = {
     "valid_entries": [
         "Smith, John, (623)-668-9293, yellow, 87360",
-        "James Murphy, yellow, 83880, 018 154 6474"
+        "James Murphy, yellow, 83880, 018 154 6474",
         "Booker T., Washington, 87360, 373 781 7380, yellow",
     ],
+    "invalid_entries": [
+        "Smith, John, (623) 668-9293, yellow, 87360",
+        "James Murphy, 83880, yellow, 018 154 6474",
+        "Booker T., Washington, 87360, 3737817380",
+        "98sd982jsf",
+        "1,2,3,4,5",
+    ],
     "valid_formats": [
-        "lastname,firstname,phone_hyphenated,color,zip",
-        "fullname,color,zip,phone_spaced",
-        "firstname,lastname,zip,phone_spaced,color"
+        "lastname,firstname,phone_hyphenated,color,zipcode",
+        "fullname,color,zipcode,phone_spaced",
+        "firstname,lastname,zipcode,phone_spaced,color"
+    ],
+    "invalid_formats": [
+        "address,phone,zip",
+        "color,zipcode,phone_spaced",
+        "firstname,lastname",
+        "lastname,zipcode,phone_spaced,color"
     ],
     "valid_phones_hyphenated": [
         '(703)-742-0996',
@@ -44,14 +57,22 @@ test_case_data = {
         'Kevin Welch',
         'Kim',
         'Smith',
+        'Maria Delgado-Gonzalez',
         'ndiENAKdnw',
     ],
     "invalid_names": [
-        'this-is-not-a-valid-name',
         'this.is.not.a.valid.name?',
         'invalid333',
         'n4m3',
-    ]
+    ],
+    "parse_output": {
+        'entries': [
+            {'lastname': 'Smith', 'firstname': 'John', 'phonenumber': '623-668-9293', 'color': 'yellow', 'zipcode': '87360'}, 
+            {'firstname': 'James', 'lastname': 'Murphy', 'color': 'yellow', 'zipcode': '83880', 'phonenumber': '018-154-6474'}, 
+            {'firstname': 'Booker T.', 'lastname': 'Washington', 'zipcode': '87360', 'phonenumber': '373-781-7380', 'color': 'yellow'}
+        ], 
+        'errors': [3, 4, 5, 6, 7]
+    }
 }
 
 

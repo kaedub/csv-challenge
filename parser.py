@@ -1,37 +1,41 @@
-from validation import field_validators
+"""Personal Information Parser"""
 
-class PersonalInfoParser():
-    def __init__(self, filename):
-        """Create an instance that will parse the filename passed to the constructor"""
+class Parser():
+    def __init__(self, data_file, validators, formats=[]):
+        """Create an instance that will parse a data file using an list of formats.
+        
+        @param data_file: filename for csv data file
+        @param formats: list of formats
+        
+        All formats must have a fullname field, or firstname and lastname fields.
 
-        self.data_file = filename
-        self.formats = []
+        All format fields must be exist in field_validators with a validation function.
+        
+        example formats list:
+        [
+            ['lastname', 'firstname', 'phone_hyphenated', 'color', 'zipcode'], 
+            ['fullname', 'color', 'zipcode', 'phone_spaced'], 
+            ['firstname', 'lastname', 'zipcode', 'phone_spaced', 'color']
+        ]
+        """
+
+        self.data_file = data_file
+        self.formats = formats
+        self.validators = validators
         self.entries = []
         self.errors = []
 
-    def _is_line_formatted(self, line, _format):
-        """Return True if 'line' matches '_format'"""
-
-        if len(line) != len(_format):
-            return False
-        else:
-            # if any field is invalid, fail
-            for i in range(len(line)):
-                field_value = line[i].strip()
-                field_name = _format[i]
-                try:
-                    validate = field_validators[field_name]
-                except KeyError as e:
-                    raise KeyError(f'Validator function for "{field_name}" not found. Did you add it to the field_validators dictionary?')
-                if not validate(field_value):
-                    return False
-        return True
-
     def _parse_field(self, name, value):
-        """Return a parsed field as a dictionary with appropriate keys"""
+        """Returns a dictionary containing the names and values of a field and handles
+        compound fields and special fields - fullname, phone_spaced, and phone_hyphenated
+        
+        @param name: string for field name
+        @param value: string for field value
+        """
 
         # this is a slightly hardcoded solution to handle complex fields
         # an extensible solution should handle field names dynamically
+        field = {}
         if name == "fullname":
             firstname = " ".join(value.split(' ')[:-1])
             lastname = value.split(' ')[-1]
@@ -42,36 +46,56 @@ class PersonalInfoParser():
         elif name == "phone_spaced":
             phone = '-'.join(value.split(' '))
             field = { "phonenumber": phone}
-        else:
+        elif name in self.validators.keys():
             field = {name: value}
+            
         return field
 
-    def _match_line_to_format(self, line):
-        """
-        Matches a line with a format and returns a dictionary.
+    def _is_entry_formatted(self, line, format_fields):
+        """Return True if line matches format_fields
         
-        Returns False if 'line' does not match any format in 'formats'
+        @param line: list of field values
+        @param format_fields: list of field names
+
+        """
+
+        if len(line) != len(format_fields):
+            return False
+        else:
+            # validate that each field in the line matches the format fields
+            for i in range(len(line)):
+                field_value = line[i].strip()
+                field_name = format_fields[i]
+                try:
+                    validate = self.validators[field_name] # get validator function for field
+                except KeyError:
+                    raise KeyError(
+                        f'Validator function for "{field_name}" not found. Did you add it to validators?'
+                    )
+                if not validate(field_value):
+                    return False
+        return True
+
+    def _match_entry_to_format(self, entry):
+        """Matches a entry with a format and returns a dictionary.
+        
+        Returns empty dict if entry does not match any format in self.formats.
+
+        @param entry: list of field values
         """
 
         for fields in self.formats:
-            if self._is_line_formatted(line, fields):
+            if self._is_entry_formatted(entry, fields):
                 row = {}
                 for i, key in enumerate(fields):
-                    value = line[i]
+                    value = entry[i]
                     field_dict = self._parse_field(key, value)
                     row = {**row, **field_dict}
                 return row
-        return False
-    
-    def load_formats(self, filename):
-        """Load formats from csv file"""
-
-        with open(filename, encoding="utf8") as f:
-            self.formats = [line.split(',') for line in f.read().split('\n')]
-        return self.formats
+        return {}
 
     def parse(self):
-        """Returns the master inventory as a dictionary"""
+        """Returns a dictionary of entries and errors parsed from the data file"""
 
         with open(self.data_file, encoding="utf8") as f:
             line = f.readline()
@@ -80,27 +104,27 @@ class PersonalInfoParser():
                 line = [field.strip() for field in line.split(',')]
 
                 # map line to field names
-                line = self._match_line_to_format(line)
+                line = self._match_entry_to_format(line)
+
                 if line:
                     self.entries.append(line)
                 else:
                     self.errors.append(line_num)
                 line = f.readline()
                 line_num += 1
-
         return { "entries": self.entries, "errors": self.errors }
 
     def to_json(self):
-        """Return a json string that is sorted and indented two spaces"""
+        """Return a json string that is sorted by lastname,firstname and indented two spaces"""
 
         json_string = '{\n'
         json_string += '  "entries": [\n'
-        field_names = list(self.entries[0].keys())
-        field_names.sort()
 
-        sorted_entres = sorted(self.entries, key = lambda e: (e['lastname'], e['firstname']))
+        sorted_entries = sorted(self.entries, key = lambda e: (e['lastname'], e['firstname']))
 
-        for i, entry in enumerate(sorted_entres):
+        for i, entry in enumerate(sorted_entries):
+            field_names = list(entry.keys())
+            field_names.sort()
             json_string += '    {\n'
             for j, name in enumerate(field_names):
                 json_string += f'      "{name}": "{entry[name]}"'
@@ -119,12 +143,15 @@ class PersonalInfoParser():
         json_string += '}\n'
         return json_string
     
-    def json_to_file(self, filename):
-        """Write json to file"""
+    def json_to_file(self, filename='result.json'):
+        """Write json to file
+        
+        @param filename: string for filename of result json file
+        """
 
         with open(filename, 'w+') as f:
             f.write(self.to_json())
     
     def __repr__(self):
-        return f'<FileReader data_file: {self.data_file} entries: {len(self.entries)} errors: {len(self.errors)} formats: {len(self.formats)}>'
+        return f'<FileReader data_file: {self.data_file} json_file: {self.json_file} entries: {len(self.entries)} errors: {len(self.errors)} formats: {len(self.formats)}>'
 

@@ -68,19 +68,3 @@ class ValidationTestCase(TestCase):
             self.assertTrue(is_name(name), f'"{name}" is not a valid name')
         for name in test_case_data.get('invalid_names'):
             self.assertFalse(is_name(name), f'"{name}" is not a valid name')
-    
-    # def test_is_row_formatted(self):
-    #     """Can validate a entry with a format?"""
-
-    #     entry = [field.strip() for field in test_case_data.get('valid_entries')[0].split(',')]
-    #     _format = test_case_data.get('valid_formats')[0].split(',')
-    #     valid = is_row_formatted(entry, _format)
-    #     self.assertTrue(valid, f'{entry} is not of a valid format')
-
-    # def test_validate_row(self):
-    #     """Can validate a entry with a list of formats?"""
-
-    #     entry = test_case_data.get('valid_entries')[0].split(',')
-    #     formats = [_format.split(',') for _format in test_case_data.get('valid_formats')]
-    #     valid = validate_row(entry, formats)
-    #     self.assertTrue(valid, f'{entry} is not of a valid format')

@@ -1,20 +1,19 @@
 import re
-from config import ZIP_LENGTH, PHONE_LENGTH
 
-def is_name(string):
-    """Returns True if 'string' is a valid name (contains only letters and whitespace)"""
-    
-    # convert hyphenate names
-    string = re.sub('-', ' ', string)
-    return ''.join(string.split(' ')).isalpha()
+def is_name(name):
+    """Returns True if a is a valid name (contains only letters, hyphens, periods, and whitespace)"""
+
+    # valid names can have hyphens, whitespace, and periods
+    name = re.sub(r'[-. ]', '', name)
+    return name.isalpha()
 
 def is_zip(zip):
-    """Returns true if 'zip' is a valid zip code"""
+    """Returns true if a string is a valid 5 digit integer zip code"""
 
     return zip.isdigit() and len(zip) == 5
 
 def is_phone_hyphenated(phone):
-    """Returns true if 'phone' is a valid phone number with parentheses and hyphens"""
+    """Returns true if a string is a valid 10 digit phone number with parentheses and hyphens"""
 
     phone_regex = r'[\(][\d]{3}[\)][\-][\d]{3}[\-][\d]{4}'
     match = re.match(phone_regex, phone)
@@ -23,7 +22,7 @@ def is_phone_hyphenated(phone):
     return match.span() == (0,len(phone))
 
 def is_phone_spaced(phone):
-    """Returns true if 'phone' is a valid phone number with spaces instead of dashes and parentheses"""
+    """Returns true if a string is a valid 10 digit phone number with spaces instead of dashes and parentheses"""
     
     phone_regex = r'[\d]{3}[ ][\d]{3}[ ][\d]{4}'
     match = re.match(phone_regex, phone)
@@ -41,7 +40,3 @@ field_validators = {
     "phone_spaced": is_phone_spaced,
     "zipcode": is_zip
 }
-
-
-
-

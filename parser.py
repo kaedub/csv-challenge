@@ -120,11 +120,14 @@ class Parser():
         json_string = '{\n'
         json_string += '  "entries": [\n'
 
+        # sort entries
         sorted_entries = sorted(self.entries, key = lambda e: (e['lastname'], e['firstname']))
 
         for i, entry in enumerate(sorted_entries):
+            # sort keys in entry
             field_names = list(entry.keys())
             field_names.sort()
+            
             json_string += '    {\n'
             for j, name in enumerate(field_names):
                 json_string += f'      "{name}": "{entry[name]}"'

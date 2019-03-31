@@ -1,3 +1,5 @@
+"""Field validation functions"""
+
 import re
 
 def is_name(name):

@@ -1,6 +1,6 @@
 # Corax Interivew Challenge - Python
 
-This program will parse a CSV file containing entries of personal information in a variety of formats and write the results as valid JSON indented two spaces to `result.json` file. The keys for each entry are sorted alphabetically and the entries are sorted alphabetically by last name then first name.
+This program will parse a file containing entries of personal information in a variety of formats, sort the entries and record invalid lines, then write the results as valid JSON indented two spaces to `result.json` file. The keys for each entry are sorted alphabetically and the entries are sorted alphabetically by last name then first name.
 
 It can easily handle a file up with a few hundred thousand lines but does not yet implement external sorting, so very large file sizes will consume too much memory.
 
@@ -13,6 +13,8 @@ New formats and field types can be added very easily. More details on how to do 
 _Written in Python 3.7.0 using only the Python standard library, no package installation is necessary._
 
 `python3 app.py`
+
+This will create a file called `result.json` containing the sorted entries and errors.
 
 ## How to add new formats
 
@@ -68,12 +70,8 @@ _NOTE: It is important to know that complex fields require some editing. A compo
 
 ## If I had more time...
 
-1) I would like to implement external sorting for large files. This will increase the time it takes to run the program but would allow for extremely large file sizes.
+1) I would like to implement **external sorting** for large files. This will increase the time it takes to run the program but would allow for extremely large file sizes. This would require some refactoring in the Parser class to allow data to be fed in parts so it can be sorted in chunks that fit in RAM and then merged later when writing to the JSON file.
 
-This would require some refactoring in the Parser class to allow data to be fed in parts so it can be sorted in chunks that fit in RAM and then merged later when writing to the JSON file.
+2) I would like spend some time **minimizing format dependecies for the Parser** by adding a means of programmatically enforcing common fields across formats. This could be done by making format validation more robust by setting a list of required fields for formats that can be used by the Parser to sort.
 
-2) I would like spend some time redesigning the Parser class to be less coupled to formats containing 'lastname' and 'firstname'. Due to the project requirements of sorting by lastname and firstname and the time restrictions this seemed like it could be overkill. 
-
-The difficulty in forming a more dynamic solution to formats and sorting is that formats can be dynamic. If the program is told to sort entries of different formats by a common field name, this adds the constraint that all formats must have at least one common field name in order to be sorted.
-
-I would like to spend more time exploring solutions on how to decouple the format validation from the JSON output.
+3) I would like to spend more time **separating concerns**. The logic to write to a json file can be separated out to a reusable means of generating JSON by accepting data as an ordered dictionary. Also, sorting could be separated out so that different methods of sorting can be used depending on input size.

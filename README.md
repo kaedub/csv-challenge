@@ -1,12 +1,8 @@
-# Corax Interivew Challenge - Python
-
 This program will parse a file containing entries of personal information in a variety of formats, sort the entries and record invalid lines, then write the results as valid JSON indented two spaces to `result.json` file. The keys for each entry are sorted alphabetically and the entries are sorted alphabetically by last name then first name.
 
 It can easily handle a file up with a few hundred thousand lines but does not yet implement external sorting, so very large file sizes will consume too much memory.
 
-_Where this program shines is in extensibility._  
 
-New formats and field types can be added very easily. More details on how to do this below.
 
 ## How to run the program from the command line
 
@@ -66,12 +62,3 @@ By setting a field name as key and a validator function as the value in the `fie
 
 
 _NOTE: It is important to know that complex fields require some editing. A compound field such as `fullname` must be split into a `firstname` and `lastname` field before being sorted and written to the JSON file. This is similar for phone numbers, which have 2 different field types for the two phone number formats but both msut be considered a `phonenumber` field before being sorted and written. Take a look at the `Parser._parse_field()` method if you wish to do this._
-
-
-## If I had more time...
-
-1) I would like to implement **external sorting** for large files. This will increase the time it takes to run the program but would allow for extremely large file sizes. This would require some refactoring in the Parser class to allow data to be fed in parts so it can be sorted in chunks that fit in RAM and then merged later when writing to the JSON file.
-
-2) I would like spend some time **minimizing format dependecies for the Parser** by adding a means of programmatically enforcing common fields across formats. This could be done by making format validation more robust by setting a list of required fields for formats that can be used by the Parser to sort.
-
-3) I would like to spend more time **separating concerns**. The logic to write to a json file can be separated out to a reusable means of generating JSON by accepting data as an ordered dictionary. Also, sorting could be separated out so that different methods of sorting can be used depending on input size.
